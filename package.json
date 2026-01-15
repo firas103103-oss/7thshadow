@@ -17,6 +17,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "postbuild": "node ./scripts/generate-health.js",
     "preview": "vite preview",
     "start": "serve -s dist -l ${PORT:-8085} --no-port-switching --no-clipboard",
     "postinstall": "if [ \"$NPM_CONFIG_PRODUCTION\" = \"true\" ] || [ \"$NODE_ENV\" = \"production\" ]; then echo \"Skipping build during production install\"; else npm run build; fi",
