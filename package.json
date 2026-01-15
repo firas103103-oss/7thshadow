@@ -24,7 +24,7 @@
     "preview": "vite preview",
     "start": "node dist/backend/server.js",
     "start:frontend": "serve -s dist -l ${PORT:-3000} --no-port-switching --no-clipboard",
-    "postinstall": "if [ \"$NPM_CONFIG_PRODUCTION\" = \"true\" ] || [ \"$NODE_ENV\" = \"production\" ]; then echo \"Skipping build during production install\"; else npm run build; fi",
+    "postinstall": "if [ \"$NODE_ENV\" = \"production\" ]; then echo \"Skipping build during production install\"; else npm run build; fi",
     "railway:build": "npm install && npm run build",
     "test": "vitest",
     "test:ui": "vitest --ui",
