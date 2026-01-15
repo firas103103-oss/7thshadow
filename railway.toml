@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "./scripts/railway-build.sh"
+buildCommand = "npm ci --legacy-peer-deps && npm run build"
 
 [deploy]
 startCommand = "npm run start"
