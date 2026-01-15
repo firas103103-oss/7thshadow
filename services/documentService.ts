@@ -124,7 +124,7 @@ export const createPublishingZip = async (
   return await zip.generateAsync({ type: "blob" });
 };
 
-const createManuscriptHtml = (pkg: PublishingPackage, meta: BookMetadata): string => {
+export const createManuscriptHtml = (pkg: PublishingPackage, meta: BookMetadata): string => {
   const isRTL = meta.language === 'ar';
   const paragraphs = pkg.editedText
     .split(/\n\s*\n/)

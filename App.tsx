@@ -10,7 +10,7 @@ import {
   validateUserInput, analyzeManuscriptScalable, 
   generateBookExtras, generateCoverImage, processBasedOnPrimaryGoal 
 } from './services/geminiService';
-import { extractTextFromFile, createPublishingZip } from './services/documentService';
+import { extractTextFromFile, createPublishingZip, createManuscriptHtml } from './services/documentService';
 import { countWords } from './utils/textChunking';
 import { useLocalStorage, useAutoSave } from './hooks/useLocalStorage';
 import TerminalInterface from './components/TerminalInterface';
@@ -115,6 +115,7 @@ const App = () => {
   const [inputText, setInputText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [finalBlob, setFinalBlob] = useState<Blob | null>(null);
+  const [previewHtmlBlob, setPreviewHtmlBlob] = useState<Blob | null>(null);
   const [isAgentTyping, setIsAgentTyping] = useState(false);
   const [processingStatus, setProcessingStatus] = useState<ProcessingStatus | null>(null);
   const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
@@ -601,6 +602,15 @@ const App = () => {
 
         const zip = await createPublishingZip(pkg, metadata as BookMetadata);
         setFinalBlob(zip);
+
+        // Generate preview HTML blob so user can open manuscript HTML directly
+        try {
+          const html = createManuscriptHtml(pkg, metadata as BookMetadata);
+          const htmlBlob = new Blob([html], { type: 'text/html' });
+          setPreviewHtmlBlob(htmlBlob);
+        } catch (err) {
+          console.warn('Could not generate preview HTML blob', err);
+        }
         
         setProcessingStatus({
           stage: 'complete',
@@ -795,6 +805,21 @@ const App = () => {
          
          {step === ChatStep.COMPLETED && finalBlob && (
              <div className="flex flex-col items-center gap-4 mt-10 animate-in zoom-in fade-in duration-500">
+                {previewHtmlBlob && (
+                  <button
+                    onClick={() => {
+                      try {
+                        const url = URL.createObjectURL(previewHtmlBlob);
+                        window.open(url, '_blank');
+                      } catch (e) {
+                        console.error('Failed to open preview', e);
+                      }
+                    }}
+                    className="flex items-center gap-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white px-8 py-3 rounded-xl font-semibold text-md shadow-md transition-transform hover:scale-105"
+                  >
+                    {lang === 'ar' ? 'معاينة الكتاب' : 'Preview Book'}
+                  </button>
+                )}
                  <button 
                     onClick={() => {
                         const url = URL.createObjectURL(finalBlob);
