@@ -1,8 +1,9 @@
-const fs = require('fs');
-const { execSync } = require('child_process');
-const path = require('path');
+import fs from 'fs';
+import { execSync } from 'child_process';
+import path from 'path';
+import { readFileSync } from 'fs';
 
-const pkg = require('../package.json');
+const pkg = JSON.parse(readFileSync('./package.json', 'utf8'));
 
 let commit = null;
 try {
@@ -18,6 +19,12 @@ const out = {
   version: pkg.version || null,
   commit: commit
 };
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const outDir = path.resolve(__dirname, '..', 'dist');
 if (!fs.existsSync(outDir)) {
