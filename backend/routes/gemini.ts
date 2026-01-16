@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { GoogleGenAI } from '@google/genai';
-import { APIError } from '../middleware/errorHandler';
+import { APIError } from '../middleware/errorHandler.js';
 
 export const geminiRouter = Router();
 

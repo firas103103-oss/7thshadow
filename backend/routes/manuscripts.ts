@@ -6,8 +6,8 @@ import {
   getUserManuscripts,
   createProcessingHistory,
   updateProcessingHistory
-} from '../db/supabase';
-import { APIError } from '../middleware/errorHandler';
+} from '../db/supabase.js';
+import { APIError } from '../middleware/errorHandler.js';
 
 export const manuscriptsRouter = Router();
 

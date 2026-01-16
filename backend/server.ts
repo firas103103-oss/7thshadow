@@ -3,11 +3,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { geminiRouter } from './routes/gemini';
-import { manuscriptsRouter } from './routes/manuscripts';
-import { authRouter } from './routes/auth';
-import { errorHandler } from './middleware/errorHandler';
-import { rateLimiter } from './middleware/rateLimiter';
+import { geminiRouter } from './routes/gemini.js';
+import { manuscriptsRouter } from './routes/manuscripts.js';
+import { authRouter } from './routes/auth.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
