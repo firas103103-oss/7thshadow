@@ -1,11 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { geminiRouter } from './routes/gemini';
 import { manuscriptsRouter } from './routes/manuscripts';
 import { authRouter } from './routes/auth';
 import { errorHandler } from './middleware/errorHandler';
 import { rateLimiter } from './middleware/rateLimiter';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -46,13 +51,23 @@ app.use('/api/gemini', geminiRouter);
 app.use('/api/manuscripts', manuscriptsRouter);
 app.use('/api/auth', authRouter);
 
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  const distPath = path.join(__dirname, '..', '..');
+  app.use(express.static(distPath));
+  
+  // Serve index.html for all non-API routes
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.sendFile(path.join(distPath, 'index.html'));
+    } else {
+      res.status(404).json({ error: 'API endpoint not found' });
+    }
+  });
+}
+
 // Error handling
 app.use(errorHandler);
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend server running on port ${PORT}`);
