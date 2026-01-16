@@ -53,7 +53,7 @@ app.use('/api/auth', authRouter);
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
-  const distPath = path.join(__dirname, '..', '..');
+  const distPath = path.join(__dirname, '..');
   app.use(express.static(distPath));
   
   // Serve index.html for all non-API routes
